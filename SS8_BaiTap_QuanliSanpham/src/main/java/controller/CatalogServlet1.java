@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet(name = "CatalogServlet", value = "/catalogServlet")
-public class CatalogServlet extends HttpServlet {
+public class CatalogServlet1 extends HttpServlet {
     private final ICatalogService catalogService = new CatalogServiceIMPL();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -37,6 +37,7 @@ public class CatalogServlet extends HttpServlet {
     private void listCatalog(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Catalog> catalogList = catalogService.findAll();
         request.setAttribute("catalogList", catalogList);
+//        response.sendRedirect("productServlet?action=show");
         request.getRequestDispatcher("productServlet?action=show").forward(request,response);
     }
 

@@ -23,12 +23,11 @@
     </header>
     <section class="section">
         <div class="func-area">
-            <div class="search-area">
-                <label>
+            <form action="productServlet" method="get">
+                    <input type="text" name="action" value="search" hidden="hidden">
                     <input type="text" name="search">
-                </label>
-                <button type="submit" class="btn-success"><a style="text-decoration: none; color: white" href="productServlet?action=search&search=">Search</a> </button>
-            </div>
+                <input type="submit" value="Search">
+            </form>
             <div class="create-area">
                 <button class="btn-outline-success"><a href="productServlet?action=create">Create New Product</a></button>
             </div>
@@ -50,9 +49,6 @@
                 <tr>
                     <td class="catalog-name" colspan="7">${catalog.getCatalogName()}</td>
                 </tr>
-                <c:if test="${listSearch != null}" >
-                    <c:set value="${productList = listSearch}"/>
-                </c:if>
                 <c:forEach items="${productList}" var="product">
                     <c:if test="${product.getCatalog().getCatalogName() == catalog.getCatalogName()}">
                         <tr>

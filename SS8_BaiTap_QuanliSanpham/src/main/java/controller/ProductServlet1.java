@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet(name = "ProductServlet", value = "/productServlet")
-public class ProductServlet extends HttpServlet {
+public class ProductServlet1 extends HttpServlet {
     IProductService productService = new ProductServiceIMPL();
     ICatalogService catalogService = new CatalogServiceIMPL();
 
@@ -37,6 +37,7 @@ public class ProductServlet extends HttpServlet {
                 showDeleteForm(request, response);
                 break;
             case "search":
+                System.out.println("in");
                 searchByName(request, response);
                 break;
             default:
@@ -68,8 +69,9 @@ public class ProductServlet extends HttpServlet {
     private void searchByName(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String search = request.getParameter("search");
         List<Product> listSearch = productService.searchByName(search);
-        request.setAttribute("listSearch", listSearch);
-        request.getRequestDispatcher("view/Home.jsp").forward(request,response);
+        request.setAttribute("catalogList", catalogService.findAll());
+        request.setAttribute("productList", listSearch);
+        request.getRequestDispatcher("view/Home1.jsp").forward(request,response);
     }
     private void deleteProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int idDel = Integer.parseInt(request.getParameter("id"));
@@ -117,7 +119,8 @@ public class ProductServlet extends HttpServlet {
     private void listProducts(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Product> productList = productService.findAll();
         request.setAttribute("productList", productList);
-        request.getRequestDispatcher("view/Home.jsp").forward(request, response);
+//        response.sendRedirect("view/Home1.jsp");
+        request.getRequestDispatcher("view/Home1.jsp").forward(request, response);
     }
 
     private void showCreateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

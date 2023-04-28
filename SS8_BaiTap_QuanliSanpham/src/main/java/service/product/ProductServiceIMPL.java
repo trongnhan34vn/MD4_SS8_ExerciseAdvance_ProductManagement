@@ -123,10 +123,9 @@ public class ProductServiceIMPL implements IProductService{
 
     @Override
     public List<Product> searchByName(String search) {
+        System.out.println(search);
         List<Product> listSearch = new ArrayList<>(findAll());
-        for (Product product:listSearch) {
-            System.out.println(product.getProductName().toLowerCase().contains(search.toLowerCase()));
-        }
+        listSearch.removeIf(product -> !product.getProductName().trim().toLowerCase().contains(search.trim().toLowerCase()));
         return listSearch;
     }
 }
