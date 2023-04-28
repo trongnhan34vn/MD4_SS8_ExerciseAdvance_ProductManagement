@@ -1,6 +1,5 @@
 package service.product;
 
-import config.Config;
 import model.Catalog;
 import model.Product;
 import service.catalog.CatalogServiceIMPL;
@@ -34,10 +33,10 @@ public class ProductServiceIMPL implements IProductService{
                         break;
                     }
                 }
+                product.setDescription(resultSet.getString("Description"));
                 product.setPrice(resultSet.getFloat("Price"));
                 product.setQuantity(resultSet.getInt("Quantity"));
                 product.setStatus(resultSet.getBoolean("Status"));
-                Config.numberFormat.format(product.getPrice());
                 productList.add(product);
             }
         } catch (Exception e) {
@@ -50,14 +49,53 @@ public class ProductServiceIMPL implements IProductService{
 
     @Override
     public void save(Product product) {
-        List<Product> productList = findAll();
         if(findById(product.getProductId()) == null) {
-            productList.add(product);
+            saveToDB(product);
         } else {
-            productList.set(productList.indexOf(findById(product.getProductId())),product);
+            updateToDB(product);
         }
     }
 
+    private void saveToDB(Product product) {
+        Connection conn = null;
+        try {
+            conn = ConnectionDB.getConnection();
+            PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO Product (ProductName, Description, CatalogID, Price, Quantity, Status) VALUES (?,?,?,?,?,?)");
+            preparedStatement.setString(1, product.getProductName());
+            preparedStatement.setString(2, product.getDescription());
+            preparedStatement.setInt(3, product.getCatalog().getCatalogId());
+            preparedStatement.setFloat(4, product.getPrice());
+            preparedStatement.setInt(5, product.getQuantity());
+            preparedStatement.setBoolean(6, product.isStatus());
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(conn);
+        }
+    }
+
+    private void updateToDB(Product product) {
+        Connection conn = null;
+        try {
+            conn = ConnectionDB.getConnection();
+            PreparedStatement preparedStatement;
+
+            preparedStatement = conn.prepareStatement("UPDATE Product SET ProductName = ?, Description = ?, CatalogID = ?, Price = ?, Quantity = ?, Status = ? WHERE ProductID = ?");
+            preparedStatement.setString(1, product.getProductName());
+            preparedStatement.setString(2, product.getDescription());
+            preparedStatement.setInt(3, product.getCatalog().getCatalogId());
+            preparedStatement.setFloat(4, product.getPrice());
+            preparedStatement.setInt(5, product.getQuantity());
+            preparedStatement.setBoolean(6, product.isStatus());
+            preparedStatement.setInt(7, product.getProductId());
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(conn);
+        }
+    }
     @Override
     public Product findById(int id) {
         List<Product> productList = findAll();
@@ -71,6 +109,24 @@ public class ProductServiceIMPL implements IProductService{
 
     @Override
     public void remove(int id) {
+        Connection conn = null;
+        try {
+            conn = ConnectionDB.getConnection();
+            PreparedStatement preparedStatement = conn.prepareStatement("DELETE FROM Product WHERE ProductID = " + id);
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionDB.closeConnection(conn);
+        }
+    }
 
+    @Override
+    public List<Product> searchByName(String search) {
+        List<Product> listSearch = new ArrayList<>(findAll());
+        for (Product product:listSearch) {
+            System.out.println(product.getProductName().toLowerCase().contains(search.toLowerCase()));
+        }
+        return listSearch;
     }
 }

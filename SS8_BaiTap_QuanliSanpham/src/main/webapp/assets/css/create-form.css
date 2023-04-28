@@ -1,0 +1,38 @@
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+.form-item label {
+    display: block;
+
+}
+
+.form-item input, select {
+    padding: 8px 10px;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid;
+}
+
+.form-item {
+    margin-bottom: 20px;
+}
+
+form {
+    width: 350px;
+    margin: auto;
+}
+
+.form-item:last-child input {
+    border: 1px solid green;
+    border-radius: 5px;
+}
+
+
+
+

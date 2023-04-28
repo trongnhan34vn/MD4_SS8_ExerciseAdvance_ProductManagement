@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="config.Config" %>
 <%--
   Created by IntelliJ IDEA.
   User: nhan
@@ -23,11 +24,13 @@
     <section class="section">
         <div class="func-area">
             <div class="search-area">
-                <input type="text">
-                <button class="btn-success">Search</button>
+                <label>
+                    <input type="text" name="search">
+                </label>
+                <button type="submit" class="btn-success"><a style="text-decoration: none; color: white" href="productServlet?action=search&search=">Search</a> </button>
             </div>
             <div class="create-area">
-                <button class="btn-outline-success"><a href="">Create New Product</a> </button>
+                <button class="btn-outline-success"><a href="productServlet?action=create">Create New Product</a></button>
             </div>
         </div>
         <table class="list-product">
@@ -47,6 +50,9 @@
                 <tr>
                     <td class="catalog-name" colspan="7">${catalog.getCatalogName()}</td>
                 </tr>
+                <c:if test="${listSearch != null}" >
+                    <c:set value="${productList = listSearch}"/>
+                </c:if>
                 <c:forEach items="${productList}" var="product">
                     <c:if test="${product.getCatalog().getCatalogName() == catalog.getCatalogName()}">
                         <tr>
@@ -56,13 +62,20 @@
                                      alt="">
                                 <span>${product.productName}</span>
                             </td>
-                            <td>${product.description}</td>
-                            <td class="mid-text">${product.price}</td>
+                            <td>
+                                <c:if test="${product.description != null}">
+                                    ${product.description}
+                                </c:if>
+                            </td>
+                            <td class="mid-text">
+                                <c:set value="${product.price}" var="price" />
+                                <c:out value="${Config.numberFormat.format(price)}" />
+                            </td>
                             <td class="mid-text">${product.quantity}</td>
                             <td class="mid-text">${product.status ? "còn hàng" : "hết hàng"}</td>
                             <td>
-                                <button class="btn-primary">Edit</button>
-                                <button class="btn-danger">Delete</button>
+                                <button class="btn-primary"><a href="productServlet?action=update&id=${product.productId}">Edit</a></button>
+                                <button class="btn-danger"><a href="productServlet?action=delete&id=${product.productId}">Delete</a></button>
                             </td>
                         </tr>
                     </c:if>

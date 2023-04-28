@@ -39,4 +39,5 @@ public class CatalogServlet extends HttpServlet {
         request.setAttribute("catalogList", catalogList);
         request.getRequestDispatcher("productServlet?action=show").forward(request,response);
     }
+
 }

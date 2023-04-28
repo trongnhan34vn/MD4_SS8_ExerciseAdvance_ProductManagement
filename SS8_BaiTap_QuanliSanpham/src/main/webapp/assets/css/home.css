@@ -1,7 +1,3 @@
-* ,body {
-    font-family: Arial, Helvetica, sans-serif;
-}
-
 .header h1 {
     text-align: center;
 }
@@ -39,8 +35,14 @@
 .list-product button {
     margin-right: 6px;
     border: none;
-    padding: 8px 16px;
     border-radius: 500px;
+}
+
+.list-product a {
+    display: block;
+    text-decoration: none;
+    color: white;
+    padding: 6px 20px;
 }
 
 .mid-text {
@@ -84,16 +86,18 @@
 }
 
 .create-area button {
+    padding: 0;
     border: 1px solid;
-    padding: 4px 10px;
+    display: block;
 }
 
 .create-area a {
     text-decoration: none;
     color: green;
+    padding: 6px 10px;
+    display: block;
 }
+
 .create-area a:hover {
     color: white;
 }
-
-
